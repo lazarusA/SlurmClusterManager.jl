@@ -179,7 +179,8 @@ function Distributed.launch(manager::SlurmManager, params::Dict, instances_arr::
         exename = params[:exename]
         exeflags = params[:exeflags]
 
-        _srun_cmd_without_env = `srun -D $exehome $exename $exeflags --worker`
+        prog = joinpath(@__DIR__, "launchuntilsuccess.sh")
+        _srun_cmd_without_env = `srun -D $exehome bash $prog $exename $exeflags --worker`
 
         @static if Base.VERSION >= v"1.6.0"
           # Pass the key-value pairs from `params[:env]` to the `srun` command:
